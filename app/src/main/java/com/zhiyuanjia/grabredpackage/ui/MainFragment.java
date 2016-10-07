@@ -37,86 +37,122 @@ public class MainFragment extends BaseSettingsFragment {
                 if ((Boolean) newValue && !GrabService.isRunning()) {
                     ((MainActivity) getActivity()).showOpenAccessibilityServiceDialog();
                 }
-                return true;
-            }
-        });
+                // 是否需要保持屏幕常亮
+                getView().setKeepScreenOn((Boolean) newValue);
+            return true;
+        }
+    }
 
-        notificationPref = (SwitchPreference) findPreference("KEY_NOTIFICATION_SERVICE_TEMP_ENABLE");
-        notificationPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    Toast.makeText(getActivity(), "该功能只支持安卓4.3以上的系统", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
+    );
 
-                if (!notificationChangeByUser) {
-                    notificationChangeByUser = true;
-                    return true;
-                }
+    notificationPref=(SwitchPreference)
 
-                boolean enalbe = (boolean) newValue;
+    findPreference("KEY_NOTIFICATION_SERVICE_TEMP_ENABLE");
 
-                Config.getConfig(getActivity()).setNotificationServiceEnable(enalbe);
+    notificationPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
 
-                if (enalbe && !GrabService.isNotificationServiceRunning()) {
-                    ((MainActivity) getActivity()).openNotificationServiceSettings();
-                    return false;
-                }
-                BaseApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(newValue));
-                return true;
-            }
-        });
-
-        Preference preference = findPreference("KEY_FOLLOW_ME");
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), AboutMeActivity.class);
-                    startActivity(intent);
-                    BaseApplication.eventStatistics(getActivity(), "about_author");
-                    return true;
-                }
-            });
+    {
+        @Override
+        public boolean onPreferenceChange (Preference preference, Object newValue){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Toast.makeText(getActivity(), "该功能只支持安卓4.3以上的系统", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-        preference = findPreference("KEY_DONATE_ME");
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-//                    ((MainActivity) getActivity()).showDonateDialog();
-//                    BaseApplication.eventStatistics(getActivity(), "donate");
-                    return true;
-                }
-            });
+        if (!notificationChangeByUser) {
+            notificationChangeByUser = true;
+            return true;
         }
 
-        findPreference("WECHAT_SETTINGS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), WechatSettingsActivity.class));
-                return true;
-            }
-        });
+        boolean enalbe = (boolean) newValue;
 
-        findPreference("NOTIFY_SETTINGS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), NotifySettingsActivity.class));
-                return true;
-            }
-        });
+        Config.getConfig(getActivity()).setNotificationServiceEnable(enalbe);
 
-        findPreference("WECHAT_WHITELIST").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        if (enalbe && !GrabService.isNotificationServiceRunning()) {
+            ((MainActivity) getActivity()).openNotificationServiceSettings();
+            return false;
+        }
+        BaseApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(newValue));
+        return true;
+    }
+    }
+
+    );
+
+    Preference preference = findPreference("KEY_FOLLOW_ME");
+    if(preference!=null)
+
+    {
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), WhitelistActivity.class));
+                Intent intent = new Intent(getActivity(), AboutMeActivity.class);
+                startActivity(intent);
+                BaseApplication.eventStatistics(getActivity(), "about_author");
                 return true;
             }
         });
     }
+
+    preference=
+
+    findPreference("KEY_DONATE_ME");
+
+    if(preference!=null)
+
+    {
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+//                    ((MainActivity) getActivity()).showDonateDialog();
+//                    BaseApplication.eventStatistics(getActivity(), "donate");
+                return true;
+            }
+        });
+    }
+
+    findPreference("WECHAT_SETTINGS")
+
+    .
+
+    setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick (Preference preference){
+            startActivity(new Intent(getActivity(), WechatSettingsActivity.class));
+            return true;
+        }
+    }
+
+    );
+
+    findPreference("NOTIFY_SETTINGS")
+
+    .
+
+    setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick (Preference preference){
+            startActivity(new Intent(getActivity(), NotifySettingsActivity.class));
+            return true;
+        }
+    }
+
+    );
+
+    findPreference("WECHAT_WHITELIST")
+
+    .
+
+    setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick (Preference preference){
+            startActivity(new Intent(getActivity(), WhitelistActivity.class));
+            return true;
+        }
+    }
+
+    );
+}
 
     /**
      * 更新快速读取通知的设置
